@@ -1,57 +1,51 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 const items = [
   {
     id: 1,
-    title: "Product 1",
-    description: "Beschrijving van product 1",
-    image: "/images/product1.png",
+    title: "SpeelSlim Startpakket",
+    description:
+      "Een pakket met basisvaardigheden voor groep 1-2, zoals tellen, letters herkennen en vormen leren. Perfect om jonge kinderen spelenderwijs kennis te laten maken met leren.",
     color: "bg-[#C793D5]",
   },
   {
     id: 2,
-    title: "Product 2",
-    description: "Beschrijving van product 2",
-    image: "/images/product2.png",
+    title: "Zinsbouw Kaarten",
+    description: "Beschrijving van zinsbouw kaarten",
     color: "bg-[#BEE6F5]",
   },
   {
     id: 3,
-    title: "Product 3",
-    description: "Beschrijving van product 3",
-    image: "/images/product3.png",
+    title: "Alfabet Avontuur",
+    description: "Beschrijving van alfabet avontuur",
     color: "bg-[#D66853]",
   },
   {
     id: 4,
-    title: "Product 4",
-    description: "Beschrijving van product 4",
-    image: "/images/product4.png",
+    title: "Theater & Verhaal Box",
+    description: "Beschrijving van theater & verhaal box",
     color: "bg-[#A6B1BA]",
   },
-];
+]
 
 export default function VerticalCarousel() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0)
 
   const handleScroll = (direction: "up" | "down") => {
     setActiveIndex((prev) =>
-      direction === "up"
-        ? (prev - 1 + items.length) % items.length
-        : (prev + 1) % items.length
-    );
-  };
+      direction === "up" ? (prev - 1 + items.length) % items.length : (prev + 1) % items.length,
+    )
+  }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-white">
-      <div className="flex space-x-4">
-        {/* Paneel met indicatoren */}
-        <div className="flex flex-col items-center space-y-4">
+    <div className="flex items-center justify-center min-h-screen bg-white p-8">
+      <div className="flex">
+        <div className="flex flex-col items-center justify-center space-y-6 mr-8">
           <button
-            className="p-2 bg-black rounded-full hover:bg-gray-300"
+            className="p-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
             onClick={() => handleScroll("up")}
           >
             ↑
@@ -59,66 +53,67 @@ export default function VerticalCarousel() {
           {items.map((_, index) => (
             <div
               key={index}
-              className={`w-3 h-3 rounded-full ${
-                activeIndex === index ? "bg-black" : "bg-gray-300"
-              }`}
-            ></div>
+              className={`w-4 h-4 rounded-full transition-colors ${activeIndex === index ? "bg-black" : "bg-gray-300"}`}
+            />
           ))}
           <button
-            className="p-2 bg-black rounded-full hover:bg-gray-300"
+            className="p-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
             onClick={() => handleScroll("down")}
           >
             ↓
           </button>
         </div>
-
-        {/* Verticale carrousel */}
-        <div className="relative w-[1200px] h-[400px] overflow-hidden">
+        <div className="relative w-[1200px] h-[300px] overflow-hidden">
           <AnimatePresence>
             {items.map((item, index) => {
-              const isVisible = index === activeIndex;
+              const isVisible = index === activeIndex
 
               return (
                 <motion.div
                   key={item.id}
-                  className={`absolute inset-0 flex flex-col p-4 rounded-lg shadow-lg ${
-                    isVisible ? item.color : "bg-black"
-                  }`}
+                  className={`absolute inset-0 flex flex-col justify-end p-4 rounded-3xl ${item.color}`}
                   initial={{
                     y: isVisible ? "100%" : 0,
-                    opacity: isVisible ? 1 : 0.5,
+                    opacity: isVisible ? 0 : 1,
+                    scale: isVisible ? 1.1 : 1,
                   }}
                   animate={{
-                    y: isVisible ? 0 : 100,
-                    opacity: isVisible ? 1 : 0.5,
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    zIndex: isVisible ? items.length - index : 0,
                   }}
                   exit={{
                     y: "-100%",
                     opacity: 0,
                   }}
-                  transition={{ duration: 0.5 }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeInOut",
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: `${index * 10}px`,
+                  }}
                 >
-                  {isVisible ? (
-                    <>
-                      <div className="text-lg font-bold">{item.title}</div>
-                      <div className="text-sm text-gray-600 mt-2">
-                        {item.description}
-                      </div>
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="mt-auto w-full h-[150px] object-cover rounded-lg"
-                      />
-                    </>
-                  ) : (
-                    <div className="text-lg font-bold">{item.title}</div>
+                  <div className="text-xl font-bold mb-1">{item.title}</div>
+                  {isVisible && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="text-sm mb-2"
+                    >
+                      {item.description}
+                    </motion.div>
                   )}
                 </motion.div>
-              );
+              )
             })}
           </AnimatePresence>
         </div>
       </div>
     </div>
-  );
+  )
 }
+
