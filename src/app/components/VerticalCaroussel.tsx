@@ -60,7 +60,15 @@ export default function VerticalCarousel() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-white p-8">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white p-8">
+      <div className="flex flex-col justify-center mb-10"  style={{ fontFamily: 'Kalam, sans-serif' }}>
+        <h2 className="text-3xl text-black font-bold text-center mb-1">Nieuwste producten</h2>
+        <img 
+          src="/images/image container (1).svg" 
+          className="w-[70px] h-[20px] mx-auto" 
+          alt="Image container" 
+          />
+        </div>
       <div className="flex h-[200px]">
         <div className="flex flex-col items-center justify-between h-full mr-8">
           <Button onClick={() => handleScroll("up")} imageUrl="/images/upload (3).png" />
